@@ -9,26 +9,24 @@ import { Container } from "./syle";
 const Form = () => {
   const [value, SetValue] = useState();
   const formSchema = yup.object().shape({
-    amount: yup
-      .number("Informe o valor da venda")
-      .required("Digite o valor da venda")
-      .positive(),
+    amount: yup.number().required("Informe o valor da venda").positive(),
     installments: yup
-      .number("Em quantas parcelas")
+      .number()
       .required("Quantidade de parcelas")
       .positive()
       .integer(),
-    mdr: yup
-      .number("Informe o percentual de MDR")
-      .required("Digite o percentual de MDR")
-      .positive(),
+    mdr: yup.number().required("Percentual de MDR").positive(),
   });
 
-  const { register, handleSubmit, reset } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     resolver: yupResolver(formSchema),
   });
 
-  const handleAdd = ({ amount, installments, mdr }) => {
+  const Add = ({ amount, installments, mdr }) => {
     const data = {
       amount,
       installments,
@@ -42,15 +40,13 @@ const Form = () => {
       .catch((err) => {
         SetValue(err.response);
       });
-
-    reset();
   };
 
   return (
     <Container>
       <section>
         <div>
-          <form onSubmit={handleSubmit(handleAdd)}>
+          <form onSubmit={handleSubmit(Add)}>
             <h1>Simule sua Antecipação</h1>
             <div className="form">
               <label>Informe o valor da venda</label>
@@ -59,15 +55,18 @@ const Form = () => {
                 type="number"
                 {...register("amount")}
               />
+              {errors.amount?.message}
             </div>
             <div className="form">
               <label>Em quantas parcelas</label>
               <input type="number" {...register("installments")} />
+              {errors.installments?.message}
               <span>Máximo de 12 parcelas</span>
             </div>
             <div className="form">
               <label>Informe o percentual de MDR</label>
               <input type="number" {...register("mdr")} />
+              {errors.mdr?.message}
             </div>
             <button type="submit">Enviar</button>
           </form>
