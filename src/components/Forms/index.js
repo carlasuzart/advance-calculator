@@ -54,7 +54,11 @@ const Form = () => {
             <h1>Simule sua Antecipação</h1>
             <div className="form">
               <label>Informe o valor da venda</label>
-              <input type="number" {...register("amount")} />
+              <input
+                placeholder="Valor superior ou  igual a R$1000,00"
+                type="number"
+                {...register("amount")}
+              />
             </div>
             <div className="form">
               <label>Em quantas parcelas</label>
